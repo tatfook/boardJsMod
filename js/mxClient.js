@@ -44138,8 +44138,8 @@ var mxPerimeter =
  */
 function mxPrintPreview(graph, scale, pageFormat, border, x0, y0, borderColor, title, pageSelector)
 {
-	this.graph = graph;
-	this.scale = (scale != null) ? scale : 1 / graph.pageScale;
+	this.graph  = graph;
+	this.scale  = (scale != null) ? scale : 1 / graph.pageScale;
 	this.border = (border != null) ? border : 0;
 	this.pageFormat = mxRectangle.fromRectangle((pageFormat != null) ? pageFormat : graph.pageFormat);
 	this.title = (title != null) ? title : 'Printer-friendly version';

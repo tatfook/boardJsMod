@@ -3355,9 +3355,13 @@ EditorUi.prototype.save = function(name)
 	}
 };
 
-EditorUi.prototype.returnXml = function()
+EditorUi.prototype.getXmlStr = function()
 {
-	return mxUtils.getXml(this.editor.getGraphXml());
+	var xml = this.editor.graph.compress(this.editor.graph.zapGremlins(mxUtils.getXml(this.editor.getGraphXml())));
+	console.log(this.currentPage);
+	//mxUtils.setTextContent();
+
+	return xml;
 }
 
 /**
