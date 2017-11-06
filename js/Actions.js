@@ -909,7 +909,7 @@ Actions.prototype.init = function()
 		{
 			ext = '_' + mxClient.language;
 		}
-		
+
 		window.open(RESOURCES_PATH + '/help' + ext + '.html');
 	});
 

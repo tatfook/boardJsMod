@@ -11371,6 +11371,7 @@ var mxClipboard =
 	 */
 	paste: function(graph)
 	{
+		alert(1111111);
 		var cells = null;
 		
 		if (!mxClipboard.isEmpty())

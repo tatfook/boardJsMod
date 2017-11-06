@@ -39,10 +39,6 @@
         mxLoadResources = false;
     </script>
     <script type="text/javascript" src="js/InitForTest.js"></script>
-    <script type="text/javascript" src="jscolor/jscolor.js"></script>
-    <script type="text/javascript" src="sanitizer/sanitizer.min.js"></script>
-    <script type="text/javascript" src="deflate/base64.js"></script>
-    <script type="text/javascript" src="deflate/pako.min.js"></script>
     <script type="text/javascript" src="js/mxClient.js"></script>
     <script type="text/javascript" src="js/EditorUi.js"></script>
     <script type="text/javascript" src="js/Editor.js"></script>
@@ -54,6 +50,10 @@
     <script type="text/javascript" src="js/Format.js"></script>
     <script type="text/javascript" src="js/Toolbar.js"></script>
     <script type="text/javascript" src="js/Dialogs.js"></script>
+    <script type="text/javascript" src="jscolor/jscolor.js"></script>
+    <script type="text/javascript" src="sanitizer/sanitizer.min.js"></script>
+    <script type="text/javascript" src="deflate/base64.js"></script>
+    <script type="text/javascript" src="deflate/pako.js"></script>
 </head>
 
 <style>
@@ -124,14 +124,29 @@
                     var graph = new Graph(document.body, null, null, null, themes);
 
                     graph.setEnabled(false);
-                    graph.importCells(children);
+                    //graph.importCells(children);
                 }else{
                     var ui = new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
                     
-                    ui.editor.graph.importCells(children);
+                    ui.actions.actions.help = new Action("help", function(){
+                        var ext = '';
+		
+                        if (mxResources.isLanguageSupported(mxClient.language))
+                        {
+                            ext = '_' + mxClient.language;
+                        }
+
+                        window.open("http://www.baidu.com");
+                    }, true, null, null);
+
+                    var doc = mxUtils.parseXml(data);
+                    ui.editor.setGraphXml(doc.documentElement);
+
+                    var compressData = ui.getCurrentCompressData();
+                    console.log(compressData);
+                    //console.log(ui.editor.graph.getDecompressData(compressData));
                 }
 
-                //console.log(editor.getXmlStr());
             }, function()
             {
                 document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';

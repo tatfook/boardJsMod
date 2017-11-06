@@ -1116,13 +1116,14 @@ Graph.prototype.initLayoutManager = function()
 		else if (style['childLayout'] == 'treeLayout')
 		{
 			var treeLayout = new mxCompactTreeLayout(this.graph);
-			treeLayout.horizontal = mxUtils.getValue(style, 'horizontalTree', '1') == '1';
-			treeLayout.resizeParent = mxUtils.getValue(style, 'resizeParent', '1') == '1';
-			treeLayout.groupPadding = mxUtils.getValue(style, 'parentPadding', 20);
-			treeLayout.levelDistance = mxUtils.getValue(style, 'treeLevelDistance', 30);
+
+			treeLayout.horizontal             = mxUtils.getValue(style, 'horizontalTree', '1') == '1';
+			treeLayout.resizeParent           = mxUtils.getValue(style, 'resizeParent', '1') == '1';
+			treeLayout.groupPadding           = mxUtils.getValue(style, 'parentPadding', 20);
+			treeLayout.levelDistance          = mxUtils.getValue(style, 'treeLevelDistance', 30);
 			treeLayout.maintainParentLocation = true;
-			treeLayout.edgeRouting = false;
-			treeLayout.resetEdges = false;
+			treeLayout.edgeRouting            = false;
+			treeLayout.resetEdges             = false;
 			
 			return treeLayout;
 		}
@@ -2434,6 +2435,12 @@ Graph.prototype.bytesToString = function(arr)
  */
 Graph.prototype.compress = function(data)
 {
+	if(typeof(require) == 'function') {
+		var pako = require('pako');
+	}else{
+        var pako = window.pako;
+    }
+
 	if (data == null || data.length == 0 || typeof(pako) === 'undefined')
 	{
 		return data;
@@ -2451,6 +2458,12 @@ Graph.prototype.compress = function(data)
  */
 Graph.prototype.decompress = function(data)
 {
+	if(typeof(require) == 'function') {
+		var pako = require('pako');
+	}else{
+        var pako = window.pako;
+    }
+	
    	if (data == null || data.length == 0 || typeof(pako) === 'undefined')
 	{
 		return data;
@@ -2485,6 +2498,28 @@ Graph.prototype.zapGremlins = function(text)
 	
 	return checked.join('');
 };
+
+
+Graph.prototype.getDecompressData = function(compressData){
+    var graphData = mxUtils.parseXml(compressData);
+    
+    if(typeof(graphData) == "object"){
+        var diagram = graphData.querySelector("diagram");
+        var version = diagram.getAttribute("version");
+        var content = diagram.innerHTML;
+
+        if(version == "0.0.1"){
+            var mxGraphModelText = this.decompress(content);
+
+            if(mxGraphModelText){
+            	return mxUtils.parseXml(mxGraphModelText);
+            }
+        }
+    }
+
+    return null;
+}
+
 
 /**
  * Hover icons are used for hover, vertex handler and drag from sidebar.
