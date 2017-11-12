@@ -11371,7 +11371,6 @@ var mxClipboard =
 	 */
 	paste: function(graph)
 	{
-		alert(1111111);
 		var cells = null;
 		
 		if (!mxClipboard.isEmpty())
@@ -79784,9 +79783,9 @@ function mxKeyHandler(graph, target)
 		this.target = target || document.documentElement;
 		
 		// Creates the arrays to map from keycodes to functions
-		this.normalKeys = [];
-		this.shiftKeys = [];
-		this.controlKeys = [];
+		this.normalKeys       = [];
+		this.shiftKeys        = [];
+		this.controlKeys      = [];
 		this.controlShiftKeys = [];
 		
 		this.keydownHandler = mxUtils.bind(this, function(evt)

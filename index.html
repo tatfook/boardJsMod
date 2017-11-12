@@ -54,6 +54,7 @@
     <script type="text/javascript" src="sanitizer/sanitizer.min.js"></script>
     <script type="text/javascript" src="deflate/base64.js"></script>
     <script type="text/javascript" src="deflate/pako.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
 </head>
 
 <style>
@@ -66,16 +67,29 @@
         (function()
         {
             var editorUiInit = EditorUi.prototype.init;
-            
             EditorUi.prototype.init = function()
             {
                 editorUiInit.apply(this, arguments);
+
+                var graph = this.editor.graph;
 
                 this.actions.get('export').setEnabled(true);
                 this.actions.get('open').setEnabled(true);
                 this.actions.get('import').setEnabled(true);
                 this.actions.get('save').setEnabled(true);
                 this.actions.get('saveAs').setEnabled(true);
+
+                console.log(graph.container);
+                console.log(mxClient.IS_IE);
+
+                graph.container.addEventListener('paste', mxUtils.bind(this, function(evt){
+                    alert("1112223333");
+                }));
+
+                // Disables built-in cut, copy and paste shortcuts
+                this.keyHandler.bindControlKey(88, null);
+                this.keyHandler.bindControlKey(67, null);
+                this.keyHandler.bindControlKey(86, null);
 
                 return;
                 // Updates action states which require a backend
@@ -93,6 +107,37 @@
                     }));
                 }
             };
+
+            EditorUi.prototype.getCurrentCompressData = function()
+            {
+                var currentGraphElement = this.editor.getGraphXml();
+
+                if(currentGraphElement && currentGraphElement.childNodes[0] &&
+                currentGraphElement.childNodes[0].childNodes.length <= 2){
+                    return null;
+                }
+
+                var currentGraphXml     = mxUtils.getXml(currentGraphElement);
+                var currentCompressText = this.editor.graph.compress(this.editor.graph.zapGremlins(currentGraphXml));
+
+                var container = document.createElement("div");
+                var diagram   = document.createElement("diagram");
+
+                diagram.innerText = currentCompressText;
+                diagram.setAttribute("version", this.version); 
+
+                container.appendChild(diagram);
+
+                return container.innerHTML;
+            }
+
+            var updatePasteActionStates = EditorUi.prototype.updatePasteActionStates;
+            EditorUi.prototype.updatePasteActionStates = function(){
+                updatePasteActionStates.call(this, arguments);
+
+                var paste = this.actions.get('paste');
+                paste.setEnabled(true);
+            }
             
             // Adds required resources (disables loading of fallback properties, this can only
             // be used if we know that all keys are defined in the language specific file)
@@ -103,9 +148,10 @@
             // Fixes possible asynchronous requests
             mxUtils.getAll([bundle, STYLE_PATH + '/default.xml'], function(xhr)
             {
+               
                 // Adds bundle text to resources
                 mxResources.parse(xhr[0].getText());
-                
+
                 // Configures the default graph theme
                 var themes = new Object();
                 themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement(); 
@@ -127,8 +173,8 @@
                     //graph.importCells(children);
                 }else{
                     var ui = new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
-                    
-                    ui.actions.actions.help = new Action("help", function(){
+
+                    ui.actions.get('help').funct = function(){
                         var ext = '';
 		
                         if (mxResources.isLanguageSupported(mxClient.language))
@@ -136,8 +182,15 @@
                             ext = '_' + mxClient.language;
                         }
 
-                        window.open("http://www.baidu.com");
-                    }, true, null, null);
+                        window.open("https://support.draw.io/display/DO/Draw.io+Online+User+Manual");
+                    }
+
+                    // ui.actions.actions.paste = new Action(mxResources.get("paste"), function(){
+                    //     if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
+                    //     {
+                    //         mxClipboard.paste(graph);
+                    //     }
+                    // }, false, 'sprite-paste', Editor.ctrlKey + '+V');
 
                     var doc = mxUtils.parseXml(data);
                     ui.editor.setGraphXml(doc.documentElement);
@@ -146,12 +199,125 @@
                     console.log(compressData);
                     //console.log(ui.editor.graph.getDecompressData(compressData));
                 }
-
             }, function()
             {
                 document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
             });
         })();
+
+        var camera = ((new Audio()).canPlayType("audio/ogg; codecs=vorbis") === "") ?
+             'https://s3-us-west-2.amazonaws.com/s.cdpn.io/9729/79190__nathan-lomeli__iphone-camera-click.wav' :
+             'https://s3-us-west-2.amazonaws.com/s.cdpn.io/9729/79190__nathan-lomeli__iphone-camera-click.ogg';
+
+        var snd = new Audio(camera); // buffers automatically when created
+
+        function snapshoot() {
+            snd.play();
+        }
+
+        // (function($) {
+        //     var defaults;
+            
+        //     $.event.fix = (function(originalFix) {
+        //         return function(event) {
+        //             event = originalFix.apply(this, arguments);
+
+        //             if (event.type.indexOf('copy') === 0 || event.type.indexOf('paste') === 0) {
+        //                 event.clipboardData = event.originalEvent.clipboardData;
+        //             }
+
+        //             return event;
+        //         };
+        //     })($.event.fix);
+
+        //     defaults = {
+        //         callback  : $.noop,
+        //         matchType : /image.*/
+        //     };
+
+        //     return $.fn.pasteImageReader = function(options) {
+        //         if (typeof options === "function") {
+        //             options = {
+        //                 callback : options
+        //             };
+        //         }
+
+        //         options = $.extend({}, defaults, options);
+
+        //         return this.each(function() {
+        //             var $this;
+        //             var element;
+
+        //             element = this;
+        //             $this   = $(this);
+
+        //             return $this.bind('paste', function(event) {
+        //                 var clipboardData;
+        //                 var found;
+
+        //                 found         = false;
+        //                 clipboardData = event.clipboardData;
+
+        //                 return Array.prototype.forEach.call(clipboardData.types, function(type, i) {
+        //                     var file, reader;
+
+        //                     if (found) {
+        //                         return;
+        //                     }
+
+        //                     if (type.match(options.matchType) || clipboardData.items[i].type.match(options.matchType)) {
+        //                         file   = clipboardData.items[i].getAsFile();
+        //                         reader = new FileReader();
+
+        //                         reader.onload = function(evt) {
+        //                             return options.callback.call(element, {
+        //                                 dataURL : evt.target.result,
+        //                                 event   : evt,
+        //                                 file    : file,
+        //                                 name    : file.name
+        //                             });
+        //                         };
+
+        //                         reader.readAsDataURL(file);
+
+        //                         snapshoot();
+
+        //                         return found = true;
+        //                     }
+        //                 });
+        //             });
+        //         });
+        //     };
+        // })(jQuery);
+
+        // $("html").pasteImageReader(function(results) {
+        //     console.log(results);
+        //     alert("666666666");
+        // });
+
+        function pasteImage(funct){
+            var controllKey     = 17;
+            var cammandKey      = 91;
+            var holdControllKey = false;
+
+            document.querySelector("body").addEventListener("keydown",function(event){
+                if(event.keyCode == controllKey || event.keyCode == cammandKey){
+                    holdControllKey = true;
+                }
+
+                if(holdControllKey && event.keyCode == 86){
+                    if(typeof(funct) === "function"){
+                        funct();
+                    }
+                }
+            });
+
+            document.querySelector("body").addEventListener("keyup",function(event){
+                if(event.keyCode == controllKey || event.keyCode == cammandKey){
+                    holdControllKey = false;
+                }
+            });
+        }
     </script>
 </body>
 </html>

@@ -85,7 +85,7 @@ EditorUi = function(editor, container, lightbox)
             this.tabContainer.onselectstart = textEditing;
         }
     }
-    
+
     // And uses built-in context menu while editing
     if (!this.editor.chromeless)
     {
@@ -962,7 +962,7 @@ EditorUi.prototype.init = function()
      * Keypress starts immediate editing on selection cell
      */
     var graph = this.editor.graph;
-        
+
     mxEvent.addListener(graph.container, 'keydown', mxUtils.bind(this, function(evt)
     {
         this.onKeyDown(evt);
@@ -975,7 +975,7 @@ EditorUi.prototype.init = function()
     // Updates action states
     this.addUndoListener();
     this.addBeforeUnloadListener();
-    
+
     graph.getSelectionModel().addListener(mxEvent.CHANGE, mxUtils.bind(this, function()
     {
         this.updateActionStates();
@@ -1187,10 +1187,10 @@ EditorUi.prototype.createMenus = function()
  */
 EditorUi.prototype.updatePasteActionStates = function()
 {
-    var graph = this.editor.graph;
-    var paste = this.actions.get('paste');
+    var graph     = this.editor.graph;
+    var paste     = this.actions.get('paste');
     var pasteHere = this.actions.get('pasteHere');
-    
+
     paste.setEnabled(this.editor.graph.cellEditor.isContentEditing() || (!mxClipboard.isEmpty() &&
         graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent())));
     pasteHere.setEnabled(paste.isEnabled());
@@ -1237,7 +1237,6 @@ EditorUi.prototype.initClipboard = function()
     mxClipboard.paste = function(graph)
     {
         var result = null;
-        
         if (graph.cellEditor.isContentEditing())
         {
             document.execCommand('paste', false, null);
@@ -3356,29 +3355,6 @@ EditorUi.prototype.save = function(name)
     }
 };
 
-EditorUi.prototype.getCurrentCompressData = function()
-{
-    var currentGraphElement = this.editor.getGraphXml();
-
-    if(currentGraphElement && currentGraphElement.childNodes[0] &&
-       currentGraphElement.childNodes[0].childNodes.length <= 2){
-        return null;
-    }
-
-    var currentGraphXml     = mxUtils.getXml(currentGraphElement);
-    var currentCompressText = this.editor.graph.compress(this.editor.graph.zapGremlins(currentGraphXml));
-
-    var container = document.createElement("div");
-    var diagram   = document.createElement("diagram");
-
-    diagram.innerText = currentCompressText;
-    diagram.setAttribute("version", this.version); 
-
-    container.appendChild(diagram);
-
-    return container.innerHTML;
-}
-
 /**
  * Executes the given layout.
  */
@@ -3564,8 +3540,8 @@ EditorUi.prototype.createOutline = function(wnd)
  */
 EditorUi.prototype.createKeyHandler = function(editor)
 {
-    var editorUi = this;
-    var graph = this.editor.graph;
+    var editorUi   = this;
+    var graph      = this.editor.graph;
     var keyHandler = new mxKeyHandler(graph);
 
     var isEventIgnored = keyHandler.isEventIgnored;
@@ -3590,7 +3566,7 @@ EditorUi.prototype.createKeyHandler = function(editor)
         return mxEvent.isControlDown(evt) || (mxClient.IS_MAC && evt.metaKey);
     };
 
-    var queue = [];
+    var queue  = [];
     var thread = null;
     
     // Helper function to move cells with the cursor keys
@@ -3730,15 +3706,20 @@ EditorUi.prototype.createKeyHandler = function(editor)
     };
     
     // Overridden to handle special alt+shift+cursor keyboard shortcuts
-    var directions = {37: mxConstants.DIRECTION_WEST, 38: mxConstants.DIRECTION_NORTH,
-            39: mxConstants.DIRECTION_EAST, 40: mxConstants.DIRECTION_SOUTH};
+    var directions = {
+        37: mxConstants.DIRECTION_WEST,
+        38: mxConstants.DIRECTION_NORTH,
+        39: mxConstants.DIRECTION_EAST,
+        40: mxConstants.DIRECTION_SOUTH
+    };
     
     var keyHandlerGetFunction = keyHandler.getFunction;
 
     // Alt+Shift+Keycode mapping to action
-    var altShiftActions = {67: this.actions.get('clearWaypoints'), // Alt+Shift+C
-                          65: this.actions.get('connectionArrows'), // Alt+Shift+A
-                          80: this.actions.get('connectionPoints') // Alt+Shift+P
+    var altShiftActions = {
+        67 : this.actions.get('clearWaypoints'),   // Alt+Shift+C
+        65 : this.actions.get('connectionArrows'), // Alt+Shift+A
+        80 : this.actions.get('connectionPoints')  // Alt+Shift+P
     };
     
     mxKeyHandler.prototype.getFunction = function(evt)
@@ -3785,7 +3766,7 @@ EditorUi.prototype.createKeyHandler = function(editor)
                         {
                             var cells = graph.connectVertex(graph.getSelectionCell(), directions[evt.keyCode],
                                 graph.defaultEdgeLength, evt, true);
-            
+
                             if (cells != null && cells.length > 0)
                             {
                                 if (cells.length == 1 && graph.model.isEdge(cells[0]))
@@ -3844,7 +3825,7 @@ EditorUi.prototype.createKeyHandler = function(editor)
                     action.funct();
                 }
             };
-            
+
             if (control)
             {
                 if (shift)
