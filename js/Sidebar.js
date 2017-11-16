@@ -6,10 +6,10 @@
  */
 function Sidebar(editorUi, container)
 {
-	this.editorUi = editorUi;
+	this.editorUi  = editorUi;
 	this.container = container;
-	this.palettes = new Object();
-	this.taglist = new Object();
+	this.palettes  = new Object();
+	this.taglist   = new Object();
 	this.showTooltips = true;
 	this.graph = editorUi.createTemporaryGraph(this.editorUi.editor.graph.getStylesheet());
 	this.graph.cellRenderer.antiAlias = false;

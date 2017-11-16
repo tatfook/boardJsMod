@@ -1,0 +1,31 @@
+
+
+<meta charset="UTF-8">
+
+<p>点击复制后在右边textarea CTRL+V看一下</p>
+
+<input type="text" id="inputText" value="测试文本"/>
+<input type="button" id="btn" value="复制"/>
+
+<div id="test" contenteditable>testtestsetsetsetsetsetset</div>
+
+<script type="text/javascript">
+    var btn = document.getElementById('btn');
+
+    btn.addEventListener('click', function(){
+        //var inputText    = document.getElementById('inputText');
+        var currentFocus = document.activeElement;
+
+        //inputText.focus();
+        //inputText.setSelectionRange(0, inputText.value.length);
+
+        //document.execCommand('copy', true);
+        //currentFocus.focus();
+
+        var textareaText = document.querySelector("#test");
+        textareaText.focus();
+
+        document.execCommand('selectAll');
+        document.execCommand('bold');
+    });
+</script>

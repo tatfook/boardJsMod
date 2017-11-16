@@ -4446,9 +4446,9 @@ DiagramFormatPanel.prototype.showBackgroundImageOption = true;
  */
 DiagramFormatPanel.prototype.init = function()
 {
-	var ui = this.editorUi;
+	var ui     = this.editorUi;
 	var editor = ui.editor;
-	var graph = editor.graph;
+	var graph  = editor.graph;
 
 	this.container.appendChild(this.addView(this.createPanel()));
 
@@ -4465,9 +4465,9 @@ DiagramFormatPanel.prototype.init = function()
  */
 DiagramFormatPanel.prototype.addView = function(div)
 {
-	var ui = this.editorUi;
+	var ui     = this.editorUi;
 	var editor = ui.editor;
-	var graph = editor.graph;
+	var graph  = editor.graph;
 	
 	div.appendChild(this.createTitle(mxResources.get('view')));
 	
@@ -4572,7 +4572,7 @@ DiagramFormatPanel.prototype.addView = function(div)
 		
 		div.appendChild(bg);
 	}
-	
+
 	return div;
 };
 
