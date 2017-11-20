@@ -96,8 +96,9 @@ EditorUi.prototype.init = function()
                                 {
                                     var pt = this.editor.graph.getInsertPoint();
 
-                                    snapshoot();
+                                    this.snapshoot();
                                     this.importFiles([item.getAsFile()], pt.x, pt.y, this.maxImageSize);
+                                    
                                     mxEvent.consume(evt);
                                 }
                                 

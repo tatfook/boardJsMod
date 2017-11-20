@@ -1,5 +1,32 @@
 var dist    = 'dist/min';
 var mxgrpah = 'mxgraph/javascript/examples/grapheditor/www';
+var output  = [
+    dist + 'board/InitForKeepwork.js',
+
+    dist + '/js/EditorUi.js',
+    dist + '/js/Editor.js',
+    dist + '/js/Sidebar.js',
+    dist + '/js/Graph.js',
+    dist + '/js/Shapes.js',
+    dist + '/js/Actions.js',
+    dist + '/js/Menus.js',
+    dist + '/js/Format.js',
+    dist + '/js/Toolbar.js',
+    dist + '/js/Dialogs.js',
+
+    dist + '/board/Boards.js',
+    dist + '/board/EditorUi.js',
+    dist + '/board/Editor.js',
+    dist + '/board/Graph.js',
+    dist + '/board/Actions.js',
+    dist + '/board/Menus.js',
+    dist + '/board/Format.js',
+    dist + '/board/Dialog.js',
+
+    dist + '/library/deflate/base64.js',
+    dist + '/library/deflate/pako.js',
+    dist + '/library/deflate/jscolor/jscolor.js'
+];
 
 module.exports = function(grunt) {
     grunt.initConfig({
@@ -36,32 +63,7 @@ module.exports = function(grunt) {
                           'library/deflate/jscolor/jscolor.js',
                         ],
                 "expand" : true,
-                "dest"   : [dist + 'board/InitForKeepwork.js',
-                
-                            dist + '/js/EditorUi.js',
-                            dist + '/js/Editor.js',
-                            dist + '/js/Sidebar.js',
-                            dist + '/js/Graph.js',
-                            dist + '/js/Shapes.js',
-                            dist + '/js/Actions.js',
-                            dist + '/js/Menus.js',
-                            dist + '/js/Format.js',
-                            dist + '/js/Toolbar.js',
-                            dist + '/js/Dialogs.js',
-
-                            dist + 'board/Boards.js',
-                            dist + 'board/EditorUi.js',
-                            dist + 'board/Editor.js',
-                            dist + 'board/Graph.js',
-                            dist + 'board/Actions.js',
-                            dist + 'board/Menus.js',
-                            dist + 'board/Format.js',
-                            dist + 'board/Dialog.js',
-
-                            dist + 'library/deflate/base64.js',
-                            dist + 'library/deflate/pako.js',
-                            dist + 'library/deflate/jscolor/jscolor.js',
-                           ],
+                "dest"   : output,
             }
         },
         // "concat"  : {
@@ -83,7 +85,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-concat');
+    // grunt.loadNpmTasks('grunt-contrib-concat');
 
     grunt.registerTask('default', ['uglify']);
 }
