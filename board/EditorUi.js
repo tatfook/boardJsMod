@@ -1510,9 +1510,7 @@ EditorUi.prototype.importFile = function(data, mimeType, dx, dy, w, h, filename,
                 'shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;' +
                 'verticalAlign=top;aspect=fixed;imageAspect=0;image=' + data + ';')];
         }
-    }
-    else if (!this.isOffline() && new XMLHttpRequest().upload && this.isRemoteFileFormat(data, filename))
-    {
+    } else if (!this.isOffline() && new XMLHttpRequest().upload && this.isRemoteFileFormat(data, filename)) {
         //  LATER: done and async are a hack before making this asynchronous
         async = true;
 
@@ -1561,6 +1559,12 @@ EditorUi.prototype.importFile = function(data, mimeType, dx, dy, w, h, filename,
     
     return cells;
 };
+
+EditorUi.prototype.snapshoot = function(){
+    var snd = new Audio(Board.CAMERA_SOUND);
+    
+    snd.play();
+}
 
 // var updatePasteActionStates = EditorUi.prototype.updatePasteActionStates;
 // EditorUi.prototype.updatePasteActionStates = function(){

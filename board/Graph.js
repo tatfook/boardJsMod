@@ -27,7 +27,7 @@ Graph.prototype.init = function()
     {
         mouseEvent = null;
     });
-            
+
     // Extends getInsertPoint to use the current mouse location
     this.isMouseInsertPoint = function()
     {

@@ -1,6 +1,5 @@
 Board = function(){
-
-
+    EditorUi.call(this, editor, container, (lightbox != null) ? lightbox : urlParams['lightbox'] == '1');
 }
 
 /**
@@ -87,3 +86,9 @@ Board.TRELLO_JQUERY_URL = 'https://code.jquery.com/jquery-1.7.1.min.js';
  * Trello JQuery dependency
  */
 Board.FOOTER_PLUGIN_URL = 'https://www.jgraph.com/drawio-footer.js';
+
+Board.CAMERA_SOUND = ((new Audio()).canPlayType("audio/ogg; codecs=vorbis") === "") ?
+window.mxBasePath + '/audio/snapshot.wav' : window.mxBasePath + '/audio/snapshot.ogg';
+
+//Extends EditorUi
+mxUtils.extend(Board, EditorUi);

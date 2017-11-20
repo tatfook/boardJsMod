@@ -49,17 +49,10 @@ var ui;
                 window.open("https://support.draw.io/display/DO/Draw.io+Online+User+Manual");
             }
 
-            // ui.actions.actions.paste = new Action(mxResources.get("paste"), function(){
-            //     if (graph.isEnabled() && !graph.isCellLocked(graph.getDefaultParent()))
-            //     {
-            //         mxClipboard.paste(graph);
-            //     }
-            // }, false, 'sprite-paste', Editor.ctrlKey + '+V');
-
             var doc = mxUtils.parseXml(data);
             ui.editor.setGraphXml(doc.documentElement);
 
-            var compressData = ui.getCurrentCompressData();
+            //var compressData = ui.getCurrentCompressData();
             //console.log(compressData);
             //console.log(ui.editor.graph.getDecompressData(compressData));
         }
@@ -68,13 +61,3 @@ var ui;
         document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
     });
 })();
-
-var camera = ((new Audio()).canPlayType("audio/ogg; codecs=vorbis") === "") ?
-     'https://s3-us-west-2.amazonaws.com/s.cdpn.io/9729/79190__nathan-lomeli__iphone-camera-click.wav' :
-     'https://s3-us-west-2.amazonaws.com/s.cdpn.io/9729/79190__nathan-lomeli__iphone-camera-click.ogg';
-
-var snd = new Audio(camera); // buffers automatically when created
-
-function snapshoot() {
-    snd.play();
-}
