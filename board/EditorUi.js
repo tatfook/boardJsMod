@@ -14,12 +14,6 @@ EditorUi.prototype.init = function()
     editorUiInit.apply(this, arguments);
 
     var graph = this.editor.graph;
-    
-    // this.actions.get('export').setEnabled(true);
-    // this.actions.get('open').setEnabled(true);
-    // this.actions.get('import').setEnabled(true);
-    // this.actions.get('save').setEnabled(true);
-    // this.actions.get('saveAs').setEnabled(true);
 
     if (!this.editor.chromeless)
     {
@@ -31,10 +25,10 @@ EditorUi.prototype.init = function()
         textInput.style.display    = 'block';
         textInput.contentEditable  = true;
 
-        //mxUtils.setOpacity(textInput, 0);
+        mxUtils.setOpacity(textInput, 0);
         
-        textInput.style.width  = '300px';
-        textInput.style.height = '100px';
+        textInput.style.width  = '1px';
+        textInput.style.height = '1px';
         textInput.innerHTML    = '&nbsp;';
         
         var restoreFocus = false;
@@ -66,7 +60,6 @@ EditorUi.prototype.init = function()
                         }
                     }
 
-                    console.log(containsText);
                     if (!containsText)
                     {
                         var items = data.items;
@@ -77,7 +70,6 @@ EditorUi.prototype.init = function()
 
                             if (item.kind === 'file')
                             {
-                                console.log(graph.isEditing());
                                 if (graph.isEditing())
                                 {
                                     this.importFiles([item.getAsFile()], 0, 0, this.maxImageSize, function(data, mimeType, x, y, w, h)
@@ -103,6 +95,7 @@ EditorUi.prototype.init = function()
                                 else
                                 {
                                     var pt = this.editor.graph.getInsertPoint();
+
                                     snapshoot();
                                     this.importFiles([item.getAsFile()], pt.x, pt.y, this.maxImageSize);
                                     mxEvent.consume(evt);
