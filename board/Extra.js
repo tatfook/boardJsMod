@@ -1,3 +1,5 @@
+var ui;
+
 // Extends EditorUi to update I/O action states based on availability of backend
 (function()
 {
@@ -34,7 +36,7 @@
             graph.importCells(children);
             
         }else{
-            var ui = new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
+            ui = new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
 
             ui.actions.get('help').funct = function(){
                 var ext = '';
@@ -75,108 +77,4 @@ var snd = new Audio(camera); // buffers automatically when created
 
 function snapshoot() {
     snd.play();
-}
-
-// (function($) {
-//     var defaults;
-    
-//     $.event.fix = (function(originalFix) {
-//         return function(event) {
-//             event = originalFix.apply(this, arguments);
-
-//             if (event.type.indexOf('copy') === 0 || event.type.indexOf('paste') === 0) {
-//                 event.clipboardData = event.originalEvent.clipboardData;
-//             }
-
-//             return event;
-//         };
-//     })($.event.fix);
-
-//     defaults = {
-//         callback  : $.noop,
-//         matchType : /image.*/
-//     };
-
-//     return $.fn.pasteImageReader = function(options) {
-//         if (typeof options === "function") {
-//             options = {
-//                 callback : options
-//             };
-//         }
-
-//         options = $.extend({}, defaults, options);
-
-//         return this.each(function() {
-//             var $this;
-//             var element;
-
-//             element = this;
-//             $this   = $(this);
-
-//             return $this.bind('paste', function(event) {
-//                 var clipboardData;
-//                 var found;
-
-//                 found         = false;
-//                 clipboardData = event.clipboardData;
-
-//                 return Array.prototype.forEach.call(clipboardData.types, function(type, i) {
-//                     var file, reader;
-
-//                     if (found) {
-//                         return;
-//                     }
-
-//                     if (type.match(options.matchType) || clipboardData.items[i].type.match(options.matchType)) {
-//                         file   = clipboardData.items[i].getAsFile();
-//                         reader = new FileReader();
-
-//                         reader.onload = function(evt) {
-//                             return options.callback.call(element, {
-//                                 dataURL : evt.target.result,
-//                                 event   : evt,
-//                                 file    : file,
-//                                 name    : file.name
-//                             });
-//                         };
-
-//                         reader.readAsDataURL(file);
-
-//                         snapshoot();
-
-//                         return found = true;
-//                     }
-//                 });
-//             });
-//         });
-//     };
-// })(jQuery);
-
-// $("html").pasteImageReader(function(results) {
-//     console.log(results);
-//     alert("666666666");
-// });
-
-function pasteImage(funct){
-    var controllKey     = 17;
-    var cammandKey      = 91;
-    var holdControllKey = false;
-
-    document.querySelector("body").addEventListener("keydown",function(event){
-        if(event.keyCode == controllKey || event.keyCode == cammandKey){
-            holdControllKey = true;
-        }
-
-        if(holdControllKey && event.keyCode == 86){
-            if(typeof(funct) === "function"){
-                funct();
-            }
-        }
-    });
-
-    document.querySelector("body").addEventListener("keyup",function(event){
-        if(event.keyCode == controllKey || event.keyCode == cammandKey){
-            holdControllKey = false;
-        }
-    });
 }
