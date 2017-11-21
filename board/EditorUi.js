@@ -763,7 +763,7 @@ EditorUi.prototype.getCurrentCompressData = function()
     var diagram   = document.createElement("diagram");
 
     diagram.innerText = currentCompressText;
-    diagram.setAttribute("version", this.version); 
+    diagram.setAttribute("version", Board.VERSION);
 
     container.appendChild(diagram);
 

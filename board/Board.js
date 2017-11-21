@@ -1,6 +1,8 @@
-Board = function(){
+var Board = function(editor, container, lightbox){
     EditorUi.call(this, editor, container, (lightbox != null) ? lightbox : urlParams['lightbox'] == '1');
 }
+
+Board.VERSION = '0.0.1';
 
 /**
  * Executes the first step for connecting to Google Drive.

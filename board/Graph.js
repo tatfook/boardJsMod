@@ -87,3 +87,70 @@ Graph.prototype.init = function()
         return layoutManagerGetLayout.apply(this, arguments);
     }
 };
+
+Graph.prototype.getDecompressData = function(compressData){
+    var graphData = mxUtils.parseXml(compressData);
+    
+    if(typeof(graphData) == "object"){
+        var diagram = graphData.querySelector("diagram");
+        var version = diagram.getAttribute("version");
+        var content = diagram.innerHTML;
+
+        if(version == "0.0.1"){
+            var mxGraphModelText = this.decompress(content);
+
+            if(mxGraphModelText){
+            	return mxUtils.parseXml(mxGraphModelText);
+            }
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Returns a base64 encoded version of the compressed string.
+ */
+Graph.prototype.compress = function(data)
+{
+	if(typeof(require) == 'function') {
+		var pako = require('pako');
+	}else{
+        var pako = window.pako;
+    }
+
+	if (data == null || data.length == 0 || typeof(pako) === 'undefined')
+	{
+		return data;
+	}
+	else
+	{
+   		var tmp = this.bytesToString(pako.deflateRaw(encodeURIComponent(data)));
+   		
+   		return (window.btoa) ? btoa(tmp) : Base64.encode(tmp, true);
+	}
+};
+
+/**
+ * Returns a decompressed version of the base64 encoded string.
+ */
+Graph.prototype.decompress = function(data)
+{
+	if(typeof(require) == 'function') {
+		var pako = require('pako');
+	}else{
+        var pako = window.pako;
+    }
+	
+   	if (data == null || data.length == 0 || typeof(pako) === 'undefined')
+	{
+		return data;
+	}
+	else
+	{
+		var tmp = (window.atob) ? atob(data) : Base64.decode(data, true);
+		
+		return this.zapGremlins(decodeURIComponent(
+			this.bytesToString(pako.inflateRaw(tmp))));
+	}
+};

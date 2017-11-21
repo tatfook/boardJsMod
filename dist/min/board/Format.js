@@ -1,2 +1,2 @@
-/* 2017-11-20 */
+/* 2017-11-21 */
 var diagramFormatPanelAddView=DiagramFormatPanel.prototype.addView;DiagramFormatPanel.prototype.addView=function(a){return diagramFormatPanelAddView.apply(this,arguments),a.removeChild(a.lastChild),a};

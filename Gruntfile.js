@@ -23,7 +23,7 @@ module.exports = function(grunt) {
                           mxgraph + '/js/Toolbar.js',
                           mxgraph + '/js/Dialogs.js',
 
-                          'board/Boards.js',
+                          'board/Board.js',
                           'board/EditorUi.js',
                           'board/Editor.js',
                           'board/Graph.js',
@@ -35,6 +35,7 @@ module.exports = function(grunt) {
                           'library/deflate/base64.js',
                           'library/deflate/pako.js',
                           'library/jscolor/jscolor.js',
+                          'library/spin/spin.js',
                         ],
                 "expand" : true,
                 "dest"   : distMin,
@@ -47,8 +48,14 @@ module.exports = function(grunt) {
         	"dist"    : {
         		"src"  : [
                           distMin + '/board/InitForKeepwork.js',
-                          mxgraph + '/mxClient.min.js',
+                          'mxgraph/javascript/mxClient.min.js',
                           
+                          distMin + '/library/jscolor/jscolor.js',
+                          distMin + '/library/deflate/base64.js',
+                          distMin + '/library/deflate/pako.js',
+                          distMin + '/library/spin/spin.js',
+                          'library/sanitizer/sanitizer.min.js',
+
         				  distMinMxgraph + '/js/EditorUi.js',
                           distMinMxgraph + '/js/Editor.js',
                           distMinMxgraph + '/js/Sidebar.js',
@@ -59,21 +66,15 @@ module.exports = function(grunt) {
                           distMinMxgraph + '/js/Format.js',
                           distMinMxgraph + '/js/Toolbar.js',
                           distMinMxgraph + '/js/Dialogs.js',
-                          
-                          distMin + 'library/jscolor/jscolor.js',
-                          distMin + 'library/deflate/base64.js',
-                          distMin + 'library/deflate/pako.js',
-                          'library/spin/spin.min.js',
-                          'library/sanitizer/sanitizer.min.js',
 
-                          distMin + 'board/Boards.js',
-                          distMin + 'board/Graph.js',
-                          distMin + 'board/Dialog.js',
-                          distMin + 'board/Actions.js',
-                          distMin + 'board/Editor.js',
-                          distMin + 'board/EditorUi.js',
-                          distMin + 'board/Format.js',
-                          distMin + 'board/Menus.js',
+                          distMin + '/board/Board.js',
+                          distMin + '/board/Graph.js',
+                          distMin + '/board/Dialog.js',
+                          distMin + '/board/Actions.js',
+                          distMin + '/board/Editor.js',
+                          distMin + '/board/EditorUi.js',
+                          distMin + '/board/Format.js',
+                          distMin + '/board/Menus.js',
         				],
         		"dest" : "dist/<%= pkg.name %>.min.js",
         	}

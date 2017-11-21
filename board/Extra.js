@@ -1,4 +1,5 @@
 var ui;
+var getData;
 
 // Extends EditorUi to update I/O action states based on availability of backend
 (function()
@@ -36,7 +37,7 @@ var ui;
             graph.importCells(children);
             
         }else{
-            ui = new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
+            ui = new Board(new Editor(urlParams['chrome'] == '0', themes));
 
             ui.actions.get('help').funct = function(){
                 var ext = '';
@@ -52,8 +53,8 @@ var ui;
             var doc = mxUtils.parseXml(data);
             ui.editor.setGraphXml(doc.documentElement);
 
-            //var compressData = ui.getCurrentCompressData();
-            //console.log(compressData);
+            var compressData = ui.getCurrentCompressData();
+            console.log(compressData);
             //console.log(ui.editor.graph.getDecompressData(compressData));
         }
     }, function()
