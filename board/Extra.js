@@ -13,6 +13,8 @@ var getData;
     // Fixes possible asynchronous requests
     mxUtils.getAll([bundle, STYLE_PATH + '/default.xml'], function(xhr)
     {
+        
+
         // Adds bundle text to resources
         mxResources.parse(xhr[0].getText());
 

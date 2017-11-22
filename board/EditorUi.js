@@ -8,6 +8,11 @@ EditorUi.prototype.maxImageSize = 520;
  */
 EditorUi.prototype.maxImageBytes = 1000000;
 
+/**
+ * Images above 100K should be resampled.
+ */
+EditorUi.prototype.resampleThreshold = 100000;
+
 var editorUiInit = EditorUi.prototype.init;
 EditorUi.prototype.init = function()
 {
@@ -37,6 +42,7 @@ EditorUi.prototype.init = function()
         this.keyHandler.bindControlKey(88, null);
         this.keyHandler.bindControlKey(67, null);
         this.keyHandler.bindControlKey(86, null);
+        this.keyHandler.bindControlKey(83, null);
 
         graph.container.addEventListener('paste', mxUtils.bind(this, function(evt){
             var graph = this.editor.graph;
@@ -115,7 +121,7 @@ EditorUi.prototype.init = function()
             }
         }), false);
 
-        mxEvent.addListener(document, 'keydown', mxUtils.bind(this, function(evt){
+        mxEvent.addListener(graph.container, 'keydown', mxUtils.bind(this, function(evt){
             var source = mxEvent.getSource(evt);
 
             if (graph.container != null && graph.isEnabled() && !graph.isMouseDown && !graph.isEditing() &&
@@ -151,7 +157,7 @@ EditorUi.prototype.init = function()
             }
         }));
 
-        mxEvent.addListener(document, 'keyup', mxUtils.bind(this, function(evt){
+        mxEvent.addListener(graph.container, 'keyup', mxUtils.bind(this, function(evt){
             // Workaround for asynchronous event read invalid in IE quirks mode
             var keyCode = evt.keyCode;
 
@@ -780,13 +786,13 @@ EditorUi.prototype.importFiles = function(files, x, y, maxSize, fn, resultFn, fi
 
     maxSize  = (maxSize != null) ? maxSize : this.maxImageSize;
     maxBytes = (maxBytes != null) ? maxBytes : this.maxImageBytes;
-    
+
     var crop = x != null && y != null;
     var resizeImages = true;
     
     // Checks if large images are imported
     var largeImages = false;
-    
+
     if (!mxClient.IS_CHROMEAPP && files != null)
     {
         var thresh = resampleThreshold || this.resampleThreshold;
@@ -1084,7 +1090,7 @@ EditorUi.prototype.importFiles = function(files, x, y, maxSize, fn, resultFn, fi
             }
         }
     });
-    
+
     if (largeImages)
     {
         this.confirmImageResize(function(doResize)
@@ -1096,6 +1102,51 @@ EditorUi.prototype.importFiles = function(files, x, y, maxSize, fn, resultFn, fi
     else
     {
         doImportFiles();
+    }
+};
+
+/**
+ * Parses the file using XHR2 via the server. File can be a blob or file object.
+ * Filename is an optional parameter for blobs (that do not have a filename).
+ */
+EditorUi.prototype.confirmImageResize = function(fn, force)
+{
+    force = (force != null) ? force : false;
+
+    var resume       = (this.spinner != null && this.spinner.pause != null) ? this.spinner.pause() : function() {};
+    var resizeImages = (isLocalStorage || mxClient.IS_CHROMEAPP) ? mxSettings.getResizeImages() : null;
+    
+    var wrapper = function(remember, resize)
+    {
+        if (remember || force)
+        {
+            mxSettings.setResizeImages((remember) ? resize : null);
+            mxSettings.save();
+        }
+        
+        resume();
+        fn(resize);
+    };
+
+    if (resizeImages != null && !force)
+    {
+        wrapper(false, resizeImages);
+    }
+    else
+    {
+        this.showDialog(new ConfirmDialog(this, mxResources.get('resizeLargeImages'),
+        function(remember)
+        {
+            wrapper(remember, true);
+        },
+        function(remember)
+        {
+            wrapper(remember, false);
+        }, mxResources.get('resize'), mxResources.get('actualSize'),
+        '<img style="margin-top:8px;" src="' + Editor.loResImage + '"/>',
+        '<img style="margin-top:8px;" src="' + Editor.hiResImage + '"/>',
+        isLocalStorage || mxClient.IS_CHROMEAPP).container, 340,
+        (isLocalStorage || mxClient.IS_CHROMEAPP) ? 220 : 200, true, true);
     }
 };
 
@@ -1138,18 +1189,19 @@ EditorUi.prototype.createSpinner = function(x, y, size)
             if (label != null)
             {
                 var status = document.createElement('div');
-                status.style.position = 'absolute';
-                status.style.whiteSpace = 'nowrap';
-                status.style.background = '#4B4243';
-                status.style.color = 'white';
-                status.style.fontFamily = 'Helvetica, Arial';
-                status.style.fontSize = '9pt';
-                status.style.padding = '6px';
-                status.style.paddingLeft = '10px';
+
+                status.style.position     = 'absolute';
+                status.style.whiteSpace   = 'nowrap';
+                status.style.background   = '#4B4243';
+                status.style.color        = 'white';
+                status.style.fontFamily   = 'Helvetica, Arial';
+                status.style.fontSize     = '9pt';
+                status.style.padding      = '6px';
+                status.style.paddingLeft  = '10px';
                 status.style.paddingRight = '10px';
-                status.style.zIndex = 2e9;
-                status.style.left = Math.max(0, x) + 'px';
-                status.style.top = Math.max(0, y + 70) + 'px';
+                status.style.zIndex       = 2e9;
+                status.style.left         = Math.max(0, x) + 'px';
+                status.style.top          = Math.max(0, y + 70) + 'px';
                 
                 mxUtils.setPrefixedStyle(status.style, 'borderRadius', '6px');
                 mxUtils.setPrefixedStyle(status.style, 'boxShadow', '2px 2px 3px 0px #ddd');
@@ -1163,7 +1215,7 @@ EditorUi.prototype.createSpinner = function(x, y, size)
                 if (mxClient.IS_VML && (document.documentMode == null || document.documentMode <= 8))
                 {
                     status.style.left = Math.round(Math.max(0, x - status.offsetWidth / 2)) + 'px';
-                    status.style.top = Math.round(Math.max(0, y + 70 - status.offsetHeight / 2)) + 'px';
+                    status.style.top  = Math.round(Math.max(0, y + 70 - status.offsetHeight / 2)) + 'px';
                 }
             }
             

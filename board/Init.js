@@ -4,6 +4,7 @@ window.urlParams = window.urlParams || {};
 // Public global variables
 window.MAX_REQUEST_SIZE = window.MAX_REQUEST_SIZE  || 10485760;
 window.MAX_AREA         = window.MAX_AREA          || 15000 * 15000;
+window.isLocalStorage   = typeof(localStorage) != 'undefined'  || false; // isLocalStorage controls access to local storage
 
 // URLs for save and export
 window.EXPORT_URL     = window.EXPORT_URL     || '/export';

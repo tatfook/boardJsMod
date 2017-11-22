@@ -31,6 +31,7 @@ module.exports = function(grunt) {
                           'board/Menus.js',
                           'board/Format.js',
                           'board/Dialog.js',
+                          'board/Settings.js',
 
                           'library/deflate/base64.js',
                           'library/deflate/pako.js',
@@ -75,6 +76,7 @@ module.exports = function(grunt) {
                           distMin + '/board/EditorUi.js',
                           distMin + '/board/Format.js',
                           distMin + '/board/Menus.js',
+                          distMin + '/board/Settings.js',
         				],
         		"dest" : "dist/<%= pkg.name %>.min.js",
         	}
