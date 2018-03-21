@@ -1,12 +1,15 @@
 {
-  "name": "board",
-  "version": "1.0.0",
-  "description": "",
-  "dependencies": {},
+  "name": "keepwork-board",
+  "version": "0.0.1",
+  "description": "Education Board",
+  "dependencies": {
+    "mxgraph": "^3.9.3"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-uglify": "^3.1.0"
+    "grunt-contrib-uglify": "^3.1.0",
+    "webpack": "^4.1.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
